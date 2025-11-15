@@ -27,7 +27,8 @@ app.post("/data-entry", async (req, res) => {
         .status(400)
         .send("Request body is required and must be valid JSON");
     }
-    await post(JSON.stringify(req.body));
+    const { healthjson, patientId } = req.body;
+    await post(JSON.stringify(healthjson),patientId);
     res.status(200).send("Data uploaded successfully");
   } catch (error) {
     console.error("Error in data-entry:", error);
