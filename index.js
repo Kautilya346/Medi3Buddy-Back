@@ -5,10 +5,8 @@ import connectDB from "./Utils/db.js";
 
 const app = express();
 
-// Load environment variables
 dotenv.config();
 
-// Connect to database
 connectDB();
 
 app.use(cors());
