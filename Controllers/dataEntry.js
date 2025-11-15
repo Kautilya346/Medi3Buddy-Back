@@ -8,9 +8,10 @@ async function post(healthDataJson) {
       throw new Error("Invalid or missing health data JSON");
     }
     const healthData = JSON.parse(healthDataJson);
+    const user_id = healthData.user_id;
     const file = new File(
       [JSON.stringify(healthData)],
-      `healthData.${healthData.user_id}.json`,
+      `healthData.${user_id}.json`,
       {
         type: "application/json",
       }
