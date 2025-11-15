@@ -1,5 +1,6 @@
 import Pinata from "../Utils/pinata.js";
 import Patient from "../Models/Patient.Model.js";
+import { v4 as uuidv4 } from "uuid";
 
 async function post(healthDataJson, patientId) {
   console.log(patientId);
@@ -15,7 +16,7 @@ async function post(healthDataJson, patientId) {
     const healthData = JSON.parse(healthDataJson);
     const file = new File(
       [JSON.stringify(healthData)],
-      `healthData.${healthData.user_id}.json`,
+      `healthData_${uuidv4()}.json`,
       {
         type: "application/json",
       }
