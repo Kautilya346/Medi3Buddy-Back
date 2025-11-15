@@ -1,4 +1,5 @@
 import Pinata from "../Utils/pinata.js";
+import { v4 as uuidv4 } from "uuid";
 
 async function post(healthDataJson) {
   console.log(process.env.PINATA_JWT);
@@ -8,10 +9,9 @@ async function post(healthDataJson) {
       throw new Error("Invalid or missing health data JSON");
     }
     const healthData = JSON.parse(healthDataJson);
-    const user_id = healthData.user_id;
     const file = new File(
       [JSON.stringify(healthData)],
-      `healthData.${user_id}.json`,
+      `healthData_${uuidv4()}.json`,
       {
         type: "application/json",
       }
