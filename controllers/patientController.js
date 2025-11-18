@@ -1,5 +1,6 @@
 import Patient from "../models/Patient.Model.js";
 import Doctor from "../models/Doctor.Model.js";
+import mongoose from "mongoose";
 
 export async function registerPatient(patientData) {
   if (!patientData || !patientData.name) {
@@ -59,6 +60,10 @@ export async function revokeDoctorAccess(patientId, doctorId) {
 }
 
 export async function getPatientData(patientId) {
+  if (!patientId || !mongoose.Types.ObjectId.isValid(patientId)) {
+    throw new Error("Invalid patient ID");
+  }
+
   const patient = await Patient.findById(patientId);
   if (!patient) {
     throw new Error("Patient not found");
