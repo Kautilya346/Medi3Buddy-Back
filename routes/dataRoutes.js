@@ -1,6 +1,7 @@
 import express from "express";
 import post from "../controllers/dataEntry.js";
 import Pinata from "../utils/pinata.js";
+import upload, { uploadBufferToPinata } from "../utils/upload.js";
 
 const router = express.Router();
 
@@ -39,6 +40,25 @@ router.get("/get-data", async (req, res) => {
   } catch (error) {
     console.error("Error fetching data from Pinata (route):", error);
     res.status(500).send(`Error fetching data: ${error.message}`);
+  }
+});
+
+// Upload a file (image/pdf), pin to Pinata, and return the CID
+router.post("/upload-media", upload.single("file"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res
+        .status(400)
+        .send("File is required (multipart/form-data field 'file')");
+    }
+
+    const file = req.file;
+    const upload = await uploadBufferToPinata(file);
+
+    res.status(200).json({ upload });
+  } catch (error) {
+    console.error("Error in upload-media route:", error);
+    res.status(500).send(`Error uploading file: ${error.message}`);
   }
 });
 
