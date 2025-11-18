@@ -1,29 +1,33 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const patientSchema = new mongoose.Schema({
+const patientSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
     age: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
     gender: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
-    medicalHistory: [{
+    medicalHistory: [
+      {
         type: String,
-        trim: true
-    }]
-}, {
-    timestamps: true
-});
+        trim: true,
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
-const Patient = mongoose.model('Patient', patientSchema);
-
+const Patient = mongoose.model("Patient", patientSchema);
 
 export default Patient;

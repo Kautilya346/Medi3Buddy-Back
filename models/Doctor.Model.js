@@ -1,24 +1,29 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const doctorSchema = new mongoose.Schema({
+const doctorSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
     specialty: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
-    accessToPatients: [{
+    accessToPatients: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Patient'
-    }]
-}, {
-    timestamps: true
-});
+        ref: "Patient",
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 
-const Doctor = mongoose.model('Doctor', doctorSchema);
+const Doctor = mongoose.model("Doctor", doctorSchema);
 
 export default Doctor;

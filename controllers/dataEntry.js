@@ -2,6 +2,7 @@ import Patient from "../models/Patient.Model.js";
 
 import { v4 as uuidv4 } from "uuid";
 import Pinata from "../utils/pinata.js";
+import { uploadBufferToPinata } from "../utils/upload.js";
 
 async function post(healthDataJson, patientId) {
 
@@ -44,4 +45,24 @@ async function post(healthDataJson, patientId) {
   }
 }
 
-export default post;
+async function mediaUpload(file) {
+  try {
+    if (!file) {
+      throw new Error("No file provided for upload");
+    }
+
+    // If this is a multer buffer, upload using the helper
+    if (file.buffer) {
+      return await uploadBufferToPinata(file);
+    }
+
+    // Otherwise attempt to pass it to Pinata (works if it's a File or stream)
+    const upload = await Pinata.upload.public.file(file);
+    return upload;
+  } catch (error) {
+    console.error("Error uploading media file:", error);
+    throw error;
+  }
+}
+
+export default { post, mediaUpload };
