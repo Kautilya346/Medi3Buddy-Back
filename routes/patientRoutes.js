@@ -3,7 +3,7 @@ import {
   grantDoctorAccess,
   revokeDoctorAccess,
   getPatientData,
-} from "../controllers/patientController";
+} from "../controllers/patientController.js";
 
 import express from "express";
 
