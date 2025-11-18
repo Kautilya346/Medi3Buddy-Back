@@ -1,6 +1,7 @@
 import express from "express";
-import post from "../controllers/dataEntry.js";
+import post from "../Controllers/dataEntry.js";
 import Pinata from "../utils/pinata.js";
+import Doctor from "../Models/Doctor.Model.js";
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.post("/data-entry", async (req, res) => {
         .status(400)
         .send("Request body is required and must be valid JSON");
     }
-    await post(JSON.stringify(req.body));
+    await post(JSON.stringify(req.body.healthDataJson), req.body.patientId);
     res.status(200).send("Data uploaded successfully");
   } catch (error) {
     console.error("Error in data-entry route:", error);
@@ -39,6 +40,21 @@ router.get("/get-data", async (req, res) => {
   } catch (error) {
     console.error("Error fetching data from Pinata (route):", error);
     res.status(500).send(`Error fetching data: ${error.message}`);
+  }
+});
+
+router.get("/get-all-patients", async (req, res) => {
+  try {
+    const doctor=req.body.doctorId;
+    const doctorData=await Doctor.findById(doctor).populate('accessToPatients');
+    if(!doctorData){
+      return res.status(404).send("Doctor not found");
+    }
+    const patients=doctorData.accessToPatients;
+    res.status(200).send(patients);
+  } catch (error) {
+    console.error("Error fetching all patients from Pinata (route):", error);
+    res.status(500).send(`Error fetching patients: ${error.message}`);
   }
 });
 

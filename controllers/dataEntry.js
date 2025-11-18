@@ -1,10 +1,11 @@
 import Patient from "../models/Patient.Model.js";
-import mongoose from "mongoose";
+
 import { v4 as uuidv4 } from "uuid";
 import Pinata from "../utils/pinata.js";
 
 async function post(healthDataJson, patientId) {
-  console.log(patientId);
+
+  console.log(patientId)
 
   try {
     if (!healthDataJson || healthDataJson === "undefined") {
