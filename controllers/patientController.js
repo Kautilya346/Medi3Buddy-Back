@@ -1,7 +1,5 @@
 import Patient from "../models/Patient.Model.js";
-import mongoose from "mongoose";
 import Doctor from "../models/Doctor.Model.js";
-import { v4 as uuidv4 } from "uuid";
 
 export async function registerPatient(patientData) {
   const patientName = patientData.name.trim();
@@ -53,4 +51,12 @@ export async function revokeDoctorAccess(patientId, doctorId) {
   }
 
   return doctor;
+}
+
+export async function getPatientData(patientId) {
+  const patient = await Patient.findById(patientId);
+  if (!patient) {
+    throw new Error("Patient not found");
+  }
+  return patient;
 }

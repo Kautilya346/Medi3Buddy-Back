@@ -2,6 +2,7 @@ import Patient from "../models/Patient.Model.js";
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import Pinata from "../utils/pinata.js";
+import Doctor from "../models/Doctor.Model.js";
 
 async function post(healthDataJson, patientId) {
   console.log(patientId);
@@ -43,4 +44,18 @@ async function post(healthDataJson, patientId) {
   }
 }
 
-export default post;
+async function mediaUpload(file) {
+  try {
+    if (!file) {
+      throw new Error("No file provided for upload");
+    }
+
+    const upload = await Pinata.upload.public.file(file);
+    return upload;
+  } catch (error) {
+    console.error("Error uploading media file:", error);
+    throw error;
+  }
+}
+
+export default { post, mediaUpload };
