@@ -1,8 +1,9 @@
 import express from "express";
-import post from "../Controllers/dataEntry.js";
+import dataEntry from "../Controllers/dataEntry.js";
 import Pinata from "../utils/pinata.js";
 import Doctor from "../Models/Doctor.Model.js";
 import upload, { uploadBufferToPinata } from "../utils/upload.js";
+import Patient from "../models/Patient.Model.js";
 const router = express.Router();
 
 // Simple GET to explain endpoint usage
@@ -19,7 +20,7 @@ router.post("/data-entry", async (req, res) => {
         .status(400)
         .send("Request body is required and must be valid JSON");
     }
-    await post(JSON.stringify(req.body.healthDataJson), req.body.patientId);
+    await dataEntry.postToPinata(JSON.stringify(req.body.healthDataJson), req.body.patientId);
     res.status(200).send("Data uploaded successfully");
   } catch (error) {
     console.error("Error in data-entry route:", error);
@@ -40,6 +41,43 @@ router.get("/get-data", async (req, res) => {
   } catch (error) {
     console.error("Error fetching data from Pinata (route):", error);
     res.status(500).send(`Error fetching data: ${error.message}`);
+  }
+});
+
+// Route to get all medical histories of patient
+router.get("/get-medical-history", async (req, res) => {
+  const patientId = req.body.patientId || req.query.patientId;
+  if (!patientId) {
+    return res.status(400).send("patientId query parameter is required");
+  }
+
+  try {
+    const patient = await Patient.findById(patientId);
+    if (!patient) {
+      return res.status(404).send("Patient not found");
+    }
+
+    // Fetch all medical history data from Pinata using CIDs
+    const medicalHistoryData = await Promise.all(
+      patient.medicalHistory.map(async (cid) => {
+        try {
+          const data = await Pinata.gateways.public.get(cid);
+          return { cid, data };
+        } catch (error) {
+          console.error(`Error fetching CID ${cid}:`, error);
+          return { cid, error: error.message };
+        }
+      })
+    );
+
+    res.status(200).json({
+      patientId: patient._id,
+      patientName: patient.name,
+      medicalHistory: medicalHistoryData
+    });
+  } catch (error) {
+    console.error("Error fetching medical history:", error);
+    res.status(500).send(`Error fetching medical history: ${error.message}`);
   }
 });
 

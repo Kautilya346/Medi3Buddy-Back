@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import Pinata from "../utils/pinata.js";
 import { uploadBufferToPinata } from "../utils/upload.js";
 
-async function post(healthDataJson, patientId) {
+async function postToPinata(healthDataJson, patientId) {
 
   console.log(patientId)
 
@@ -65,4 +65,4 @@ async function mediaUpload(file) {
   }
 }
 
-export default { post, mediaUpload };
+export default { postToPinata, mediaUpload };
