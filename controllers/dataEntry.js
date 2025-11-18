@@ -1,6 +1,7 @@
-import Pinata from "../Utils/pinata.js";
-import Patient from "../Models/Patient.Model.js";
+import Patient from "../models/Patient.Model.js";
+import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
+import Pinata from "../utils/pinata.js";
 
 async function post(healthDataJson, patientId) {
   console.log(patientId);
@@ -12,7 +13,7 @@ async function post(healthDataJson, patientId) {
     if (!patientId) {
       throw new Error("Patient ID is required");
     }
-    
+
     const healthData = JSON.parse(healthDataJson);
     const file = new File(
       [JSON.stringify(healthData)],
@@ -23,18 +24,18 @@ async function post(healthDataJson, patientId) {
     );
     const upload = await Pinata.upload.public.file(file);
     console.log(upload);
-    
+
     // Add CID to patient's medical history
     const patient = await Patient.findByIdAndUpdate(
       patientId,
       { $push: { medicalHistory: upload.cid } },
       { new: true }
     );
-    
+
     if (!patient) {
       throw new Error("Patient not found");
     }
-    
+
     return { upload, patient };
   } catch (error) {
     console.log(error);

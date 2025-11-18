@@ -1,0 +1,45 @@
+import express from "express";
+import post from "../controllers/dataEntry.js";
+import Pinata from "../utils/pinata.js";
+
+const router = express.Router();
+
+// Simple GET to explain endpoint usage
+router.get("/data-entry", (req, res) => {
+  res.send(
+    "This endpoint accepts POST requests for data entry. Use a tool like Postman or curl to send POST requests."
+  );
+});
+
+router.post("/data-entry", async (req, res) => {
+  try {
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res
+        .status(400)
+        .send("Request body is required and must be valid JSON");
+    }
+    await post(JSON.stringify(req.body));
+    res.status(200).send("Data uploaded successfully");
+  } catch (error) {
+    console.error("Error in data-entry route:", error);
+    res.status(500).send(`Error uploading data: ${error.message}`);
+  }
+});
+
+// Route to fetch pinned data by CID
+router.get("/get-data", async (req, res) => {
+  const cid = req.query.cid;
+  if (!cid) {
+    return res.status(400).send("cid query parameter is required");
+  }
+
+  try {
+    const response = await Pinata.gateways.public.get(cid);
+    res.status(200).send(response);
+  } catch (error) {
+    console.error("Error fetching data from Pinata (route):", error);
+    res.status(500).send(`Error fetching data: ${error.message}`);
+  }
+});
+
+export default router;
