@@ -8,7 +8,7 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/register-doctor", async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
     const doctorData = req.body;
     const doctor = await registerDoctor(doctorData);
@@ -19,7 +19,7 @@ router.post("/register-doctor", async (req, res) => {
   }
 });
 
-router.get("/doctor-patients/:doctorId", async (req, res) => {
+router.get("/:doctorId/patients", async (req, res) => {
   try {
     const doctorId = req.params.doctorId;
     const patients = await getDoctorPatients(doctorId);
@@ -30,7 +30,7 @@ router.get("/doctor-patients/:doctorId", async (req, res) => {
   }
 });
 
-router.get("/doctors", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
     const doctors = await getAllDoctors();
     res.status(200).json(doctors);
@@ -40,7 +40,7 @@ router.get("/doctors", async (req, res) => {
   }
 });
 
-router.get("/doctor/:doctorId", async (req, res) => {
+router.get("/:doctorId", async (req, res) => {
   try {
     const doctorId = req.params.doctorId;
     const doctor = await getDoctorById(doctorId);

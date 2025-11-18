@@ -9,7 +9,7 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/register-patient", async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
     const patientData = req.body;
     const patient = await registerPatient(patientData);
@@ -42,7 +42,7 @@ router.post("/revoke-access", async (req, res) => {
   }
 });
 
-router.get("/patient/:patientId", async (req, res) => {
+router.get("/:patientId", async (req, res) => {
   try {
     const patientId = req.params.patientId;
     const patient = await getPatientData(patientId);

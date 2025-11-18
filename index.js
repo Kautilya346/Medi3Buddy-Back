@@ -17,8 +17,8 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Routes
 app.use("/api", dataEntryRoutes);
-app.use("/api", doctorRoutes);
-app.use("/api", patientRoutes);
+app.use("/api/doctor", doctorRoutes);
+app.use("/api/patient", patientRoutes);
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(
