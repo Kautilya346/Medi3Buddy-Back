@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
 import dataEntryRoutes from "./routes/dataRoutes.js";
+import doctorRoutes from "./routes/doctorRoutes.js";
+import patientRoutes from "./routes/patientRoutes.js";
 import "./mqttServer.js";
 
 const app = express();
@@ -17,6 +19,8 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Routes
 app.use("/api", dataEntryRoutes);
+app.use("/api/doctor", doctorRoutes);
+app.use("/api/patient", patientRoutes);
 
 app.listen(process.env.PORT || 5000, () => {
   console.log(

@@ -20,7 +20,10 @@ router.post("/data-entry", async (req, res) => {
         .status(400)
         .send("Request body is required and must be valid JSON");
     }
-    await dataEntry.postToPinata(JSON.stringify(req.body.healthDataJson), req.body.patientId);
+    await dataEntry.postToPinata(
+      JSON.stringify(req.body.healthDataJson),
+      req.body.patientId
+    );
     res.status(200).send("Data uploaded successfully");
   } catch (error) {
     console.error("Error in data-entry route:", error);
@@ -73,7 +76,7 @@ router.post("/get-medical-history", async (req, res) => {
     res.status(200).json({
       patientId: patient._id,
       patientName: patient.name,
-      medicalHistory: medicalHistoryData
+      medicalHistory: medicalHistoryData,
     });
   } catch (error) {
     console.error("Error fetching medical history:", error);
@@ -83,12 +86,14 @@ router.post("/get-medical-history", async (req, res) => {
 
 router.post("/get-all-patients", async (req, res) => {
   try {
-    const doctor=req.body.doctorId;
-    const doctorData=await Doctor.findById(doctor).populate('accessToPatients');
-    if(!doctorData){
+    const doctor = req.body.doctorId;
+    const doctorData = await Doctor.findById(doctor).populate(
+      "accessToPatients"
+    );
+    if (!doctorData) {
       return res.status(404).send("Doctor not found");
     }
-    const patients=doctorData.accessToPatients;
+    const patients = doctorData.accessToPatients;
     res.status(200).send(patients);
   } catch (error) {
     console.error("Error fetching all patients from Pinata (route):", error);
