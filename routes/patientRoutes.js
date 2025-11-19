@@ -42,6 +42,19 @@ router.post("/revoke-access", async (req, res) => {
   }
 });
 
+// Get doctors who have access to a patient (must come before /data/:patientId)
+router.get("/doctors-with-access/:patientId", async (req, res) => {
+  try {
+    const patientId = req.params.patientId;
+    const Doctor = (await import("../models/Doctor.Model.js")).default;
+    const doctors = await Doctor.find({ accessToPatients: patientId });
+    res.status(200).json(doctors);
+  } catch (error) {
+    console.error("Error fetching doctors with access:", error);
+    res.status(500).json({ error: "Error fetching doctors with access" });
+  }
+});
+
 router.get("/data/:patientId", async (req, res) => {
   try {
     const patientId = req.params.patientId;
