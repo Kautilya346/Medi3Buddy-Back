@@ -48,7 +48,7 @@ router.get("/get-data", async (req, res) => {
 });
 
 // Route to get all medical histories of patient
-router.get("/get-medical-history", async (req, res) => {
+router.post("/get-medical-history", async (req, res) => {
   const patientId = req.body.patientId || req.query.patientId;
   if (!patientId) {
     return res.status(400).send("patientId query parameter is required");
@@ -84,7 +84,7 @@ router.get("/get-medical-history", async (req, res) => {
   }
 });
 
-router.get("/get-all-patients", async (req, res) => {
+router.post("/get-all-patients", async (req, res) => {
   try {
     const doctor = req.body.doctorId;
     const doctorData = await Doctor.findById(doctor).populate(
