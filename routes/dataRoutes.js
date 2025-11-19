@@ -1,7 +1,7 @@
 import express from "express";
-import dataEntry from "../Controllers/dataEntry.js";
+import dataEntry from "../controllers/dataEntry.js";
 import Pinata from "../utils/pinata.js";
-import Doctor from "../Models/Doctor.Model.js";
+import Doctor from "../models/Doctor.Model.js";
 import upload, { uploadBufferToPinata } from "../utils/upload.js";
 import Patient from "../models/Patient.Model.js";
 const router = express.Router();
@@ -46,7 +46,7 @@ router.get("/get-data", async (req, res) => {
 
 // Route to get all medical histories of patient
 router.post("/get-medical-history", async (req, res) => {
-  const patientId = req.body.patientId || req.query.patientId;
+  const patientId = req.body.patientId;
   if (!patientId) {
     return res.status(400).send("patientId query parameter is required");
   }
@@ -54,7 +54,7 @@ router.post("/get-medical-history", async (req, res) => {
   try {
     const patient = await Patient.findById(patientId);
     if (!patient) {
-      return res.status(404).send("Patient not found");
+      return res.status(400).send("Patient not found");
     }
 
     // Fetch all medical history data from Pinata using CIDs
@@ -105,10 +105,26 @@ router.post("/upload-media", upload.single("file"), async (req, res) => {
         .send("File is required (multipart/form-data field 'file')");
     }
 
+    const patientId = req.body.patientId;
+    if (!patientId) {
+      return res.status(400).send("patientId is required in request body");
+    }
+
     const file = req.file;
     const upload = await uploadBufferToPinata(file);
 
-    res.status(200).json({ upload });
+    // Add CID to patient's medical history
+    const patient = await Patient.findByIdAndUpdate(
+      patientId,
+      { $push: { medicalHistory: upload.cid } },
+      { new: true }
+    );
+
+    if (!patient) {
+      return res.status(404).send("Patient not found");
+    }
+
+    res.status(200).json({ upload, patient });
   } catch (error) {
     console.error("Error in upload-media route:", error);
     res.status(500).send(`Error uploading file: ${error.message}`);

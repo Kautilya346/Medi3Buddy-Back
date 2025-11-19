@@ -3,6 +3,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./utils/db.js";
 import dataEntryRoutes from "./routes/dataRoutes.js";
+import "./mqttServer.js";
+
 const app = express();
 
 dotenv.config();

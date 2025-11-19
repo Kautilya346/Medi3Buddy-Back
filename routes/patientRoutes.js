@@ -42,9 +42,9 @@ router.post("/revoke-access", async (req, res) => {
   }
 });
 
-router.get("/patient/:patientId", async (req, res) => {
+router.post("/patient/:patientId", async (req, res) => {
   try {
-    const patientId = req.params.patientId;
+    const patientId = req.body.patientId;
     const patient = await getPatientData(patientId);
     res.status(200).json(patient);
   } catch (error) {

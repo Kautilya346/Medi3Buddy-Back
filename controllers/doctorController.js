@@ -1,4 +1,4 @@
-import Doctor from "../Models/Doctor.Model.js";
+import Doctor from "../models/Doctor.Model.js";
 
 export async function registerDoctor(doctorData) {
   const doctorName = doctorData.name.trim();
