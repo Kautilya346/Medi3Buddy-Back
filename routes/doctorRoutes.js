@@ -1,4 +1,9 @@
-import doctorController from "../controllers/doctorController.js";
+import {
+  registerDoctor,
+  getAllDoctors,
+  getDoctorById,
+  getDoctorPatients,
+} from "../controllers/doctorController.js";
 import express from "express";
 
 const router = express.Router();
@@ -6,7 +11,7 @@ const router = express.Router();
 router.post("/register", async (req, res) => {
   try {
     const doctorData = req.body;
-    const doctor = await doctorController.registerDoctor(doctorData);
+    const doctor = await registerDoctor(doctorData);
     res.status(201).json(doctor);
   } catch (error) {
     console.error("Error registering doctor:", error);
@@ -14,10 +19,10 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.get("/doctor-patients/:doctorId", async (req, res) => {
+router.get("/:doctorId/patients", async (req, res) => {
   try {
     const doctorId = req.params.doctorId;
-    const patients = await doctorController.getDoctorPatients(doctorId);
+    const patients = await getDoctorPatients(doctorId);
     res.status(200).json(patients);
   } catch (error) {
     console.error("Error fetching doctor's patients:", error);
@@ -25,9 +30,9 @@ router.get("/doctor-patients/:doctorId", async (req, res) => {
   }
 });
 
-router.get("/doctors", async (req, res) => {
+router.get("/all", async (req, res) => {
   try {
-    const doctors = await doctorController.getAllDoctors();
+    const doctors = await getAllDoctors();
     res.status(200).json(doctors);
   } catch (error) {
     console.error("Error fetching doctors:", error);
@@ -35,10 +40,10 @@ router.get("/doctors", async (req, res) => {
   }
 });
 
-router.get("/doctor/:doctorId", async (req, res) => {
+router.get("/:doctorId", async (req, res) => {
   try {
     const doctorId = req.params.doctorId;
-    const doctor = await doctorController.getDoctorById(doctorId);
+    const doctor = await getDoctorById(doctorId);
     res.status(200).json(doctor);
   } catch (error) {
     console.error("Error fetching doctor by ID:", error);

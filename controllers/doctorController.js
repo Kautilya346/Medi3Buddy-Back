@@ -9,12 +9,12 @@ export async function registerDoctor(doctorData) {
   const specialty = doctorData.specialty
     ? String(doctorData.specialty).trim()
     : undefined;
-  
+
   const doctor = await Doctor.create({
     name: doctorName,
     specialty: specialty,
   });
-  
+
   return doctor;
 }
 
