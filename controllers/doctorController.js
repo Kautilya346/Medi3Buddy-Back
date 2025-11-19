@@ -1,19 +1,21 @@
 import Doctor from "../models/Doctor.Model.js";
 
 export async function registerDoctor(doctorData) {
-  const doctorName = doctorData.name.trim();
-  const specialization = doctorData.specialization.trim();
+  if (!doctorData || !doctorData.name) {
+    throw new Error("Doctor name is required");
+  }
+
+  const doctorName = String(doctorData.name).trim();
+  const specialty = doctorData.specialty
+    ? String(doctorData.specialty).trim()
+    : undefined;
+  
   const doctor = await Doctor.create({
     name: doctorName,
-    specialization: specialization,
+    specialty: specialty,
   });
-  return (
-    doctor._id,
-    doctor.name,
-    doctor.specialization,
-    doctor.accessToPatients,
-    doctor.createdAt
-  );
+  
+  return doctor;
 }
 
 export async function getDoctorPatients(doctorId) {
@@ -36,3 +38,10 @@ export async function getDoctorById(doctorId) {
   }
   return doctor;
 }
+
+export default {
+  registerDoctor,
+  getDoctorPatients,
+  getAllDoctors,
+  getDoctorById,
+};

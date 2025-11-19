@@ -3,7 +3,7 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/register-doctor", async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
     const doctorData = req.body;
     const doctor = await doctorController.registerDoctor(doctorData);
@@ -45,3 +45,5 @@ router.get("/doctor/:doctorId", async (req, res) => {
     res.status(500).json({ error: "Error fetching doctor by ID" });
   }
 });
+
+export default router;
