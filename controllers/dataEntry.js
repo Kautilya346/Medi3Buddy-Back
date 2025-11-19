@@ -1,12 +1,12 @@
 import Patient from "../models/Patient.Model.js";
-import mongoose from "mongoose";
+
 import { v4 as uuidv4 } from "uuid";
 import Pinata from "../utils/pinata.js";
 import { uploadBufferToPinata } from "../utils/upload.js";
-import Doctor from "../models/Doctor.Model.js";
 
-async function post(healthDataJson, patientId) {
-  console.log(patientId);
+async function postToPinata(healthDataJson, patientId) {
+
+  console.log(patientId)
 
   try {
     if (!healthDataJson || healthDataJson === "undefined") {
@@ -65,4 +65,4 @@ async function mediaUpload(file) {
   }
 }
 
-export default { post, mediaUpload };
+export default { postToPinata, mediaUpload };
