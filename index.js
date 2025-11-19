@@ -5,6 +5,8 @@ import connectDB from "./utils/db.js";
 import dataEntryRoutes from "./routes/dataRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
 import patientRoutes from "./routes/patientRoutes.js";
+import "./mqttServer.js";
+
 const app = express();
 
 dotenv.config();

@@ -57,7 +57,7 @@ router.get("/doctors-with-access/:patientId", async (req, res) => {
 
 router.get("/data/:patientId", async (req, res) => {
   try {
-    const patientId = req.params.patientId;
+    const patientId = req.body.patientId;
     const patient = await getPatientData(patientId);
     res.status(200).json(patient);
   } catch (error) {
